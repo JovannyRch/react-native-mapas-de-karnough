@@ -10,8 +10,7 @@ const variablesStyles = StyleSheet.create({
     justifyContent: "center",
   },
   varText: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 17,
     textAlign: "center",
   },
   vars: {

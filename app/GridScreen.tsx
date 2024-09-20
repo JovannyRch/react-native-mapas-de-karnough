@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import TwoVariablesGrid from "./Grids/TwoVariablesGrid";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ViewMode } from "./types/types";
@@ -9,6 +9,8 @@ import useUpdateEffect from "./hooks/useUpdateEffect";
 import { KMaps } from "./utils/KMaps";
 import Subtitle from "@/components/Subtitle";
 import SelectDropdown from "react-native-select-dropdown";
+import ThreeVariablesGrid from "./Grids/ThreeVariablesGrid";
+import FourVariables from "./Grids/FourVariablesGrid";
 
 interface GridScreenProps {
   navigation: any;
@@ -73,7 +75,18 @@ export default function GridScreen({ navigation }: GridScreenProps) {
   };
 
   useEffect(() => {
-    if (variableQuantity == 2) {
+    if (variableQuantity === 2) {
+      setSquares([
+        [
+          [getValue(0), "0", "0"],
+          [getValue(1), "1", "0"],
+        ],
+        [
+          [getValue(2), "0", "1"],
+          [getValue(3), "1", "1"],
+        ],
+      ]);
+    } else if (variableQuantity === 3) {
       setSquares([
         [
           [getValue(0), "0", "0"],
@@ -89,90 +102,109 @@ export default function GridScreen({ navigation }: GridScreenProps) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ButtonsWrapper title="Cantidad de variables">
-        <Button
-          onPress={() => setVariableQuantity(2)}
-          title="2"
-          active={variableQuantity == 2}
-        />
-        <Button
-          onPress={() => setVariableQuantity(3)}
-          title="3"
-          active={variableQuantity == 3}
-        />
-        <Button
-          onPress={() => setVariableQuantity(4)}
-          title="4"
-          active={variableQuantity == 4}
-        />
-      </ButtonsWrapper>
-      {/*   <ViewModeSelector
+      <ScrollView>
+        <ButtonsWrapper title="Cantidad de variables">
+          <Button
+            onPress={() => setVariableQuantity(2)}
+            title="2"
+            active={variableQuantity == 2}
+          />
+          <Button
+            onPress={() => setVariableQuantity(3)}
+            title="3"
+            active={variableQuantity == 3}
+          />
+          <Button
+            onPress={() => setVariableQuantity(4)}
+            title="4"
+            active={variableQuantity == 4}
+          />
+        </ButtonsWrapper>
+        {/*   <ViewModeSelector
         currentView={viewMode}
         setView={(view) => setViewMode(view)}
       /> */}
-      {/* <ButtonsWrapper title="Valores">
+        {/* <ButtonsWrapper title="Valores">
         <Button onPress={() => setAll("1")} title="1s" />
         <Button onPress={() => setAll("0")} title="0s" />
         <Button onPress={() => setAll("X")} title="Xs" />
       </ButtonsWrapper>
  */}
-      <View style={styles.gridContainer}>
-        {variableQuantity == 2 && (
-          <TwoVariablesGrid
-            onPress={onPress}
-            values={values}
-            vars={variableQuantity}
-          />
-        )}
-      </View>
+        <View style={styles.gridContainer}>
+          {variableQuantity == 2 && (
+            <TwoVariablesGrid
+              onPress={onPress}
+              values={values}
+              vars={variableQuantity}
+            />
+          )}
+          {variableQuantity == 3 && (
+            <ThreeVariablesGrid
+              onPress={onPress}
+              values={values}
+              vars={variableQuantity}
+            />
+          )}
+          {variableQuantity == 4 && (
+            <FourVariables
+              onPress={onPress}
+              values={values}
+              vars={variableQuantity}
+            />
+          )}
+        </View>
 
-      <ButtonsWrapper title="Tipo de resultado">
-        <SelectDropdown
-          data={dropDownValues}
-          onSelect={(selectedItem, index) => {
-            setResultType(selectedItem.value as "SOP" | "POS");
-          }}
-          renderButton={(selectedItem, isOpened) => {
-            return (
-              <View style={styles.dropdownButtonStyle}>
-                <Text style={styles.dropdownButtonTxtStyle}>
-                  {(selectedItem && selectedItem.title) ||
-                    (
-                      dropDownValues.find(
-                        (item) => item.value === resultType
-                      ) || dropDownValues[0]
-                    ).title}
-                </Text>
-                <Text style={styles.dropdownButtonArrowStyle}>
-                  {isOpened ? "▲" : "▼"}
-                </Text>
-              </View>
-            );
-          }}
-          renderItem={(item) => {
-            return (
-              <View
-                style={
-                  resultType === item.value
-                    ? [styles.dropdownItemStyle, { backgroundColor: "#D2D9DF" }]
-                    : styles.dropdownItemStyle
-                }
-              >
-                <Text style={styles.dropdownItemTxtStyle}>{item.title}</Text>
-              </View>
-            );
-          }}
-          showsVerticalScrollIndicator={false}
-          dropdownStyle={styles.dropdownMenuStyle}
-        />
-      </ButtonsWrapper>
-      <View style={styles.resultButtonContainer}>
-        <Button
-          onPress={() => handleGetResult(resultType)}
-          title="Obtener resultado"
-          active
-        />
-      </View>
+        <ButtonsWrapper title="Tipo de resultado">
+          <SelectDropdown
+            data={dropDownValues}
+            onSelect={(selectedItem, index) => {
+              setResultType(selectedItem.value as "SOP" | "POS");
+            }}
+            renderButton={(selectedItem, isOpened) => {
+              return (
+                <View style={styles.dropdownButtonStyle}>
+                  <Text style={styles.dropdownButtonTxtStyle}>
+                    {(selectedItem && selectedItem.title) ||
+                      (
+                        dropDownValues.find(
+                          (item) => item.value === resultType
+                        ) || dropDownValues[0]
+                      ).title}
+                  </Text>
+                  <Text style={styles.dropdownButtonArrowStyle}>
+                    {isOpened ? "▲" : "▼"}
+                  </Text>
+                </View>
+              );
+            }}
+            renderItem={(item) => {
+              return (
+                <View
+                  style={
+                    resultType === item.value
+                      ? [
+                          styles.dropdownItemStyle,
+                          { backgroundColor: "#D2D9DF" },
+                        ]
+                      : styles.dropdownItemStyle
+                  }
+                >
+                  <Text style={styles.dropdownItemTxtStyle}>{item.title}</Text>
+                </View>
+              );
+            }}
+            showsVerticalScrollIndicator={false}
+            dropdownStyle={styles.dropdownMenuStyle}
+          />
+        </ButtonsWrapper>
+        <View style={styles.resultButtonContainer}>
+          <Button
+            onPress={() => handleGetResult(resultType)}
+            title="Obtener resultado"
+            active
+          />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -185,6 +217,7 @@ const styles = StyleSheet.create({
   gridContainer: {
     padding: 10,
     paddingVertical: 30,
+    paddingTop: 40,
   },
   dropdownButtonStyle: {
     width: 300,
