@@ -10,7 +10,7 @@ const ResultScreen = ({ route }: ResultScreenProps) => {
   const { result, resultType, kMap } = route.params;
   return (
     <SafeAreaView>
-      <Text style={styles.result}>{kMap.getResult()}</Text>
+      <Text style={styles.result}>{kMap.getMathExpression()}</Text>
       <CircuitComponent
         variables={["A", "B", "C"]}
         initGroups={"(A'.B)+(A.B)"}

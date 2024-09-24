@@ -28,16 +28,6 @@ const GridBox = ({ values, index, onPress, total }: GridBoxProps) => {
     return bin;
   };
 
-  const getIndexStyle = () => {
-    let style: any = {
-      textAlign: "left",
-    };
-    if (total == 5) style = { ...style, fontSize: 10 };
-    /* if (values[index] == "1") style = { ...style, color: "white" }; */
-
-    return style;
-  };
-
   const getValueStyle = () => {
     let style: any = {
       fontSize: 25,
@@ -52,9 +42,15 @@ const GridBox = ({ values, index, onPress, total }: GridBoxProps) => {
     <View style={{ ...getStyle(values[index]) }}>
       <TouchableOpacity style={styles.touch} onPress={() => onPress(index)}>
         <View style={styles.containerText}>
-          {/* <Text style={getIndexStyle()}>
-            {total != 5 ? `${parseBin(index)} - ${index} ` : index}
-          </Text> */}
+          <Text
+            style={{
+              ...styles.index,
+              ...(values[index] == "1" ? { color: "white" } : {}),
+            }}
+          >
+            {/*  {total != 5 ? `${parseBin(index)} - ${index} ` : index} */}
+            {index}
+          </Text>
           <Text style={getValueStyle()}>{values[index]}</Text>
         </View>
       </TouchableOpacity>
@@ -76,12 +72,17 @@ const styles = StyleSheet.create({
   touch: { display: "flex", flex: 1, justifyContent: "center" },
   containerText: {
     display: "flex",
-    flexDirection: "column",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "stretch",
   },
   indexText: {
     textAlign: "left",
+  },
+  index: {
+    textAlign: "left",
+    width: "auto",
+    paddingLeft: 3,
+    fontSize: 12,
   },
 });
 export default GridBox;

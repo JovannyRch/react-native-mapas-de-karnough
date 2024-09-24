@@ -37,18 +37,18 @@ export default function ThreeVariablesGrid({
           <Text style={variablesStyles.varText}>0</Text>
         </View>
         <GridBox total={vars} values={values} onPress={onPress} index={0} />
-        <GridBox total={vars} values={values} onPress={onPress} index={1} />
-        <GridBox total={vars} values={values} onPress={onPress} index={3} />
         <GridBox total={vars} values={values} onPress={onPress} index={2} />
+        <GridBox total={vars} values={values} onPress={onPress} index={6} />
+        <GridBox total={vars} values={values} onPress={onPress} index={4} />
       </View>
       <View style={variablesStyles.row}>
         <View style={variablesStyles.lefColumn}>
           <Text style={variablesStyles.varText}>1</Text>
         </View>
-        <GridBox total={vars} values={values} onPress={onPress} index={4} />
-        <GridBox total={vars} values={values} onPress={onPress} index={5} />
+        <GridBox total={vars} values={values} onPress={onPress} index={1} />
+        <GridBox total={vars} values={values} onPress={onPress} index={3} />
         <GridBox total={vars} values={values} onPress={onPress} index={7} />
-        <GridBox total={vars} values={values} onPress={onPress} index={6} />
+        <GridBox total={vars} values={values} onPress={onPress} index={5} />
       </View>
     </>
   );
