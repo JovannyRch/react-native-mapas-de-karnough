@@ -22,8 +22,11 @@ export const useStore = create<ResultStore>((set) => ({
   groups: [],
   cleanGroups: () => set({ groups: [] }),
   variableQuantity: 2,
-  setVariableQuantity: (newQuantity: number) =>
-    set({ variableQuantity: newQuantity }),
+  setVariableQuantity: (newQuantity: number) => {
+    set({ variableQuantity: newQuantity });
+    set({ result: "" });
+    set({ boxColors: [] });
+  },
   boxColors: [],
   setBoxColors: (newBoxColors: BoxColor[]) => set({ boxColors: newBoxColors }),
 }));
