@@ -32,15 +32,43 @@ export default function TwoVariablesGrid({
         <View style={variablesStyles.lefColumn}>
           <Text style={variablesStyles.varText}>0</Text>
         </View>
-        <GridBox total={vars} values={values} onPress={onPress} index={0} />
-        <GridBox total={vars} values={values} onPress={onPress} index={2} />
+        <GridBox
+          total={vars}
+          values={values}
+          onPress={onPress}
+          index={0}
+          row={0}
+          column={1}
+        />
+        <GridBox
+          total={vars}
+          values={values}
+          onPress={onPress}
+          index={2}
+          row={0}
+          column={2}
+        />
       </View>
       <View style={variablesStyles.row}>
         <View style={variablesStyles.lefColumn}>
           <Text style={variablesStyles.varText}>1</Text>
         </View>
-        <GridBox total={vars} values={values} onPress={onPress} index={1} />
-        <GridBox total={vars} values={values} onPress={onPress} index={3} />
+        <GridBox
+          total={vars}
+          values={values}
+          onPress={onPress}
+          index={1}
+          row={0}
+          column={1}
+        />
+        <GridBox
+          total={vars}
+          values={values}
+          onPress={onPress}
+          index={3}
+          row={0}
+          column={1}
+        />
       </View>
     </View>
   );

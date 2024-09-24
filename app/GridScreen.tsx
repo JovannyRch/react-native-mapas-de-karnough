@@ -30,19 +30,25 @@ const dropDownValues = [
 ];
 
 export default function GridScreen({ navigation }: GridScreenProps) {
-  const [variableQuantity, setVariableQuantity] = useState(2);
-
   const [values, setValues] = useState<string[]>(["0", "0", "0", "0"]);
   const [viewMode, setViewMode] = useState<ViewMode>("map");
   const [resultType, setResultType] = useState<"SOP" | "POS">("SOP");
   const [squares, setSquares] = useState<(number | string)[][][]>([]);
-  const { result, clearResult, setResult } = useStore();
+  const {
+    result,
+    clearResult,
+    setResult,
+    setBoxColors,
+    variableQuantity,
+    setVariableQuantity,
+  } = useStore();
 
   const onPress = (index: number) => {
     let newValues = [...values];
     newValues[index] = nextState(newValues[index]);
     setValues(newValues);
     clearResult();
+    setBoxColors([]);
   };
 
   const nextState = (value: string) => {
@@ -58,7 +64,7 @@ export default function GridScreen({ navigation }: GridScreenProps) {
     setValues(newValues);
   };
 
-  useUpdateEffect(() => {
+  useEffect(() => {
     setValues(Array.from({ length: 2 ** variableQuantity }, () => "0"));
   }, [variableQuantity]);
 
@@ -71,6 +77,7 @@ export default function GridScreen({ navigation }: GridScreenProps) {
     const kMap = new KMaps(variableQuantity, solutionType, squares);
     kMap.Algorithm();
     setResult(kMap.getMathExpression());
+    setBoxColors(kMap.getBoxColors());
     /* navigation.navigate("ResultScreen", {
       result: kMap.getMathExpression(),
       resultType,

@@ -1,9 +1,14 @@
+import { BoxColor, Position } from "../types/types";
+
 export class KMaps {
   squares: (number | string)[][][];
   typeMap: number;
   typeSol: "SOP" | "POS";
   result: string;
   mathExpression: string;
+  groups: Position[][];
+  borderWidth: number;
+  boxColors: BoxColor[];
 
   constructor(
     typeMap: number,
@@ -15,6 +20,9 @@ export class KMaps {
     this.squares = squares;
     this.result = "";
     this.mathExpression = "";
+    this.groups = [];
+    this.borderWidth = 5;
+    this.boxColors = [];
   }
 
   Algorithm() {
@@ -460,8 +468,13 @@ export class KMaps {
         temp[v] = [];
     }
 
+    //this.groups = { ...groups };
     this.Solution(temp, groups);
-    //this.drawGroup(temp, groups);
+
+    console.log("temp", temp);
+    console.log("groups", groups);
+
+    this.drawGroup(temp, groups);
   }
 
   Solution(temp: any, groups: any) {
@@ -608,7 +621,7 @@ export class KMaps {
     this.mathExpression = vettoreSol2.join(
       this.typeSol === "SOP" ? " + " : " · "
     );
-    //this.drawSolution(vettoreSol);
+    /* this.drawSolution(vettoreSol); */
   }
 
   isPower(x: number, y: number) {
@@ -618,6 +631,265 @@ export class KMaps {
     while (pow < y) pow *= x;
 
     return pow === y;
+  }
+
+  drawGroup(temp: any, groups: any) {
+    let color = [
+      "red",
+      "blue",
+      "green",
+      "orange",
+      "#50C878",
+      "lightblue",
+      "#CD7F32",
+      "#ff6699",
+    ]; //array dei colori
+    let c = -1; //usato per identificare i singoli div per il quale poi verranno eliminati, indica anche il colore da usare
+
+    this.boxColors = [];
+
+    for (let i = 0; i < temp.length; i++) {
+      if (
+        temp[i].length > 0 &&
+        groups[i].length !== Math.pow(2, this.typeMap)
+      ) {
+        c++;
+        let j = 0;
+        let FirstElCol = groups[i][0].col;
+        let FirstElRig = groups[i][0].riga;
+        while (j < groups[i].length) {
+          const col = groups[i][j].col;
+          const row = groups[i][j].riga;
+
+          let element: any = {
+            borderColor: color[c],
+          };
+
+          //Valutazione del tipo di elemento secondo quale celle del gruppo gli sono adiacenti e in quale posizione
+          let destra = this.checkElInGroups(j, groups[i], "destra");
+          let sotto = this.checkElInGroups(j, groups[i], "sotto");
+          let sinistra = this.checkElInGroups(j, groups[i], "sinistra");
+          let sopra = this.checkElInGroups(j, groups[i], "sopra");
+
+          //  console.log("d: " + destra + " sin: " + sinistra + " sopra: " + sopra + " sotto: " + sotto);
+
+          //valutazione dei casi per poi inserire il nome corretto di classe css che indica il tipo di raggruppamento da disegnare per quella cella
+          if (destra) {
+            if (sotto) {
+              if (sinistra) {
+                if (groups[i][j].col === FirstElCol)
+                  element = this.addBorder(element, "topLeft");
+                else if (
+                  j === groups[i].length / 2 - 1 ||
+                  j === groups[i].length - 1
+                )
+                  element = this.addBorder(element, "topRight");
+                else element = this.addBorder(element, "top");
+              } else if (sopra) {
+                if (j === groups[i].length - 2 || j === groups[i].length - 1)
+                  element = this.addBorder(element, "bottomLeft");
+                else if (groups[i][j].riga === FirstElRig)
+                  element = this.addBorder(element, "topLeft");
+                else element = this.addBorder(element, "left");
+              } else element = this.addBorder(element, "topLeft");
+            } else if (sopra) {
+              if (sinistra) {
+                if (groups[i][j].col === FirstElCol)
+                  element = this.addBorder(element, "bottomLeft");
+                else if (
+                  j === groups[i].length - 1 ||
+                  j === groups[i].length / 2 - 1
+                )
+                  element = this.addBorder(element, "bottomRight");
+                else element = this.addBorder(element, "bottom");
+              } else element = this.addBorder(element, "bottomLeft");
+            } else if (sinistra) {
+              if (j === 0) element = this.addBorder(element, "closedLeft");
+              else if (j === groups[i].length - 1)
+                element = this.addBorder(element, "closedRight");
+              else element = this.addBorder(element, "top-bottom");
+            } else element = this.addBorder(element, "closedLeft");
+          } else if (sopra) {
+            if (sinistra) {
+              if (sotto) {
+                if (groups[i][j].riga === FirstElRig)
+                  element = this.addBorder(element, "topRight");
+                else if (
+                  j === groups[i].length - 1 ||
+                  j === groups[i].length - 2
+                )
+                  element = this.addBorder(element, "bottomRight");
+                else element = this.addBorder(element, "right");
+              } else element = this.addBorder(element, "bottomRight");
+            } else if (sotto) {
+              if (j === 0) element = this.addBorder(element, "closedTop");
+              else if (j === groups[i].length - 1)
+                element = this.addBorder(element, "closedBottom");
+              else element = this.addBorder(element, "right-left");
+            } else element = this.addBorder(element, "closedBottom");
+          } else if (sinistra) {
+            if (sotto) element = this.addBorder(element, "topRight");
+            else element = this.addBorder(element, "closedRight");
+          } else if (sotto) element = this.addBorder(element, "closedTop");
+          else element = this.addBorder(element, "monoGroup");
+          j++;
+          this.boxColors.push({ row, column: col, style: element });
+        }
+      }
+    }
+  }
+
+  checkElInGroups(j: number, groups: any[], lato: string) {
+    const matrix = this.squares;
+    let r = matrix[0].length;
+    let c = matrix[0].length;
+    if (this.typeMap === 3) {
+      r = 2;
+      c = 4;
+    }
+    for (let k = 0; k < groups.length; k++) {
+      if (
+        lato === "destra" &&
+        groups[k].col === (groups[j].col + 1) % c &&
+        groups[k].riga === groups[j].riga % r
+      )
+        return true;
+      if (
+        lato === "sotto" &&
+        groups[k].col === groups[j].col % c &&
+        groups[k].riga === (groups[j].riga + 1) % r
+      )
+        return true;
+      if (lato === "sinistra") {
+        let col = groups[j].col - 1;
+        if (col < 0) col = c - 1;
+        if (groups[k].col === col % c && groups[k].riga === groups[j].riga % r)
+          return true;
+      }
+      if (lato === "sopra") {
+        let riga = groups[j].riga - 1;
+        if (riga < 0) riga = r - 1;
+        if (groups[k].col === groups[j].col % c && groups[k].riga === riga % r)
+          return true;
+      }
+    }
+    return false;
+  }
+
+  addBorder(
+    element: object,
+    position:
+      | "top"
+      | "right"
+      | "bottom"
+      | "left"
+      | "topRight"
+      | "topLeft"
+      | "bottomRight"
+      | "bottomLeft"
+      | "closedLeft"
+      | "closedRight"
+      | "closedTop"
+      | "closedBottom"
+      | "top-bottom"
+      | "right-left"
+      | "monoGroup"
+  ) {
+    switch (position) {
+      case "top":
+        return { ...element, borderTopWidth: this.borderWidth };
+      case "right":
+        return { ...element, borderRightWidth: this.borderWidth };
+      case "bottom":
+        return { ...element, borderBottomWidth: this.borderWidth };
+      case "left":
+        return { ...element, borderLeftWidth: this.borderWidth };
+      case "topRight":
+        return {
+          ...element,
+          borderTopWidth: this.borderWidth,
+          borderRightWidth: this.borderWidth,
+          borderTopRightRadius: 10,
+        };
+      case "topLeft":
+        return {
+          ...element,
+          borderTopWidth: this.borderWidth,
+          borderLeftWidth: this.borderWidth,
+          borderTopLeftRadius: 10,
+        };
+      case "bottomRight":
+        return {
+          ...element,
+          borderBottomWidth: this.borderWidth,
+          borderRightWidth: this.borderWidth,
+          borderBottomRightRadius: 10,
+        };
+      case "bottomLeft":
+        return {
+          ...element,
+          borderBottomWidth: this.borderWidth,
+          borderLeftWidth: this.borderWidth,
+          borderBottomLeftRadius: 10,
+        };
+      case "closedLeft":
+        return {
+          ...element,
+          borderLeftWidth: this.borderWidth,
+          borderTopWidth: this.borderWidth,
+          borderBottomWidth: this.borderWidth,
+          borderBottomLeftRadius: 10,
+          borderTopLeftRadius: 10,
+        };
+      case "closedRight":
+        return {
+          ...element,
+          borderRightWidth: this.borderWidth,
+          borderTopWidth: this.borderWidth,
+          borderBottomWidth: this.borderWidth,
+          borderBottomRightRadius: 10,
+          borderTopRightRadius: 10,
+        };
+
+      case "closedTop":
+        return {
+          ...element,
+          borderTopWidth: this.borderWidth,
+          borderLeftWidth: this.borderWidth,
+          borderRightWidth: this.borderWidth,
+          borderTopRightRadius: 10,
+          borderTopLeftRadius: 10,
+        };
+      case "closedBottom":
+        return {
+          ...element,
+          borderBottomWidth: this.borderWidth,
+          borderLeftWidth: this.borderWidth,
+          borderRightWidth: this.borderWidth,
+          borderBottomRightRadius: 10,
+          borderBottomLeftRadius: 10,
+        };
+      case "top-bottom":
+        return {
+          ...element,
+          borderTopWidth: this.borderWidth,
+          borderBottomWidth: this.borderWidth,
+        };
+      case "right-left":
+        return {
+          ...element,
+          borderRightWidth: this.borderWidth,
+          borderLeftWidth: this.borderWidth,
+        };
+      case "monoGroup":
+        return {
+          ...element,
+          borderWidth: this.borderWidth,
+          borderRadius: 10,
+        };
+      default:
+        return element;
+    }
   }
 
   drawSolution(vettoreSol: string[]) {
@@ -697,5 +969,47 @@ export class KMaps {
 
   getMathExpression() {
     return this.mathExpression;
+  }
+
+  getGroups(): Position[][] {
+    /* console.log("this.groups", this.groups); */
+    /* const groups = {
+      "0": [
+        { col: 2, riga: 1 },
+        { col: 3, riga: 1 },
+      ],
+      "1": [
+        { col: 0, riga: 0 },
+        { col: 1, riga: 0 },
+      ],
+      "2": [{ col: 3, riga: 1 }],
+      "3": [{ col: 1, riga: 0 }],
+    }; */
+    return [
+      [
+        {
+          row: 0,
+          column: 0,
+        },
+        {
+          row: 0,
+          column: 1,
+        },
+      ],
+      [
+        {
+          row: 1,
+          column: 2,
+        },
+        {
+          row: 1,
+          column: 3,
+        },
+      ],
+    ];
+  }
+
+  getBoxColors() {
+    return this.boxColors;
   }
 }
