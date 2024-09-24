@@ -1,4 +1,5 @@
 import { Colors } from "@/app/colors";
+import useStore from "@/app/store";
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
@@ -10,7 +11,12 @@ interface GridBoxProps {
 }
 
 const GridBox = ({ values, index, onPress, total }: GridBoxProps) => {
+  const { result } = useStore();
+
   const getStyle = (value: number | string) => {
+    if (result) {
+      return styles.box;
+    }
     if (value == 1) {
       return { ...styles.box, backgroundColor: "#5271FF" };
     }
@@ -34,7 +40,8 @@ const GridBox = ({ values, index, onPress, total }: GridBoxProps) => {
       textAlign: "center",
       color: "black",
     };
-    if (values[index] == "1") style = { ...style, color: "white" };
+
+    if (values[index] == "1" && !result) style = { ...style, color: "white" };
     return style;
   };
 
@@ -45,7 +52,7 @@ const GridBox = ({ values, index, onPress, total }: GridBoxProps) => {
           <Text
             style={{
               ...styles.index,
-              ...(values[index] == "1" ? { color: "white" } : {}),
+              ...(values[index] == "1" && !result ? { color: "white" } : {}),
             }}
           >
             {/*  {total != 5 ? `${parseBin(index)} - ${index} ` : index} */}

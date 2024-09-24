@@ -29,7 +29,7 @@ export const CircuitComponent = React.memo(
     };
     let vars = addNegations(variables);
     const n = vars.length;
-    let height = n * 8;
+    let height = n * 10;
     let groups = initGroups.split("(").join("").split(")").join("");
     let separator = isMaxiterm ? "." : "+";
     let joiner = isMaxiterm ? "+" : ".";
@@ -278,6 +278,70 @@ export const CircuitComponent = React.memo(
 
     htmlContent += `</div>`;
 
+    htmlContent = `<div style="position: relative;top: 0px;height: 200px;  overflow-x: scroll;">
+                <div  style="position: absolute;top: 0px;left:10px;"><b>A</b></div>
+                <div style="position: absolute;top: 15px;left:10px;width: 2px; height: 48px; background-color: #2f4858;"></div>
+
+                <div  style="position: absolute;top: 0px;left:23px;"><b>A'</b></div>
+                <div style="position: absolute;top: 15px;left:23px;width: 2px; height: 48px; background-color: #2f4858;"></div>
+
+                            <div style="position: absolute;top: 30px;left:21px;width: 10px; height: 10px; background-color: #2f4858;border-radius: 100px;"></div>
+                            <div style="position: absolute;top: 33px;left:23px;width: 95px; height: 3px; background-color: #2f4858;"></div>
+
+                <div  style="position: absolute;top: 0px;left:36px;"><b>B</b></div>
+                <div style="position: absolute;top: 15px;left:36px;width: 2px; height: 48px; background-color: #2f4858;"></div>
+
+                            <div style="position: absolute;top: 38px;left:34px;width: 10px; height: 10px; background-color: #2f4858;border-radius: 100px;"></div>
+                            <div style="position: absolute;top: 41px;left:36px;width: 82px; height: 3px; background-color: #2f4858;"></div>
+
+                <div  style="position: absolute;top: 0px;left:49px;"><b>B'</b></div>
+                <div style="position: absolute;top: 15px;left:49px;width: 2px; height: 48px; background-color: #2f4858;"></div>
+
+                <div  style="position: absolute;top: 0px;left:62px;"><b>C</b></div>
+                <div style="position: absolute;top: 15px;left:62px;width: 2px; height: 48px; background-color: #2f4858;"></div>
+
+                <div  style="position: absolute;top: 0px;left:75px;"><b>C'</b></div>
+                <div style="position: absolute;top: 15px;left:75px;width: 2px; height: 48px; background-color: #2f4858;"></div>
+         <div style="position: absolute;top: 15px;left:118px;width: 48px; height: 62.400000000000006px; background-color: #2f4858;border-top-right-radius: 50%;border-bottom-right-radius: 50%;z-index:2;"></div>
+              <div style="position: absolute;top: 39px;left:166px;width: 13px; height: 3px; background-color: #2f4858;"></div>
+
+                <div  style="position: absolute;top: 88px;left:10px;"><b>A</b></div>
+                <div style="position: absolute;top: 103px;left:10px;width: 2px; height: 48px; background-color: #2f4858;"></div>
+
+                            <div style="position: absolute;top: 110px;left:8px;width: 10px; height: 10px; background-color: #2f4858;border-radius: 100px;"></div>
+                            <div style="position: absolute;top: 113px;left:10px;width: 108px; height: 3px; background-color: #2f4858;"></div>
+
+                <div  style="position: absolute;top: 88px;left:23px;"><b>A'</b></div>
+                <div style="position: absolute;top: 103px;left:23px;width: 2px; height: 48px; background-color: #2f4858;"></div>
+
+                <div  style="position: absolute;top: 88px;left:36px;"><b>B</b></div>
+                <div style="position: absolute;top: 103px;left:36px;width: 2px; height: 48px; background-color: #2f4858;"></div>
+
+                            <div style="position: absolute;top: 126px;left:34px;width: 10px; height: 10px; background-color: #2f4858;border-radius: 100px;"></div>
+                            <div style="position: absolute;top: 129px;left:36px;width: 82px; height: 3px; background-color: #2f4858;"></div>
+
+                <div  style="position: absolute;top: 88px;left:49px;"><b>B'</b></div>
+                <div style="position: absolute;top: 103px;left:49px;width: 2px; height: 48px; background-color: #2f4858;"></div>
+
+                <div  style="position: absolute;top: 88px;left:62px;"><b>C</b></div>
+                <div style="position: absolute;top: 103px;left:62px;width: 2px; height: 48px; background-color: #2f4858;"></div>
+
+                <div  style="position: absolute;top: 88px;left:75px;"><b>C'</b></div>
+                <div style="position: absolute;top: 103px;left:75px;width: 2px; height: 48px; background-color: #2f4858;"></div>
+         <div style="position: absolute;top: 103px;left:118px;width: 48px; height: 62.400000000000006px; background-color: #2f4858;border-top-right-radius: 50%;border-bottom-right-radius: 50%;z-index:2;"></div>
+              <div style="position: absolute;top: 127px;left:166px;width: 13px; height: 3px; background-color: #2f4858;"></div>
+
+            <div style="position: absolute; top: 39px;left:179px;background-color: #2f4858; width: 3px; height: 39px;z-index: 3;" ></div>
+            <div style="position: absolute; top: 78px;left:179;background-color: #2f4858; width: 28.4px; height: 3px;z-index: 3;" ></div>
+
+            <div style="position: absolute; top: 88px;left:179px;background-color: #2f4858; width: 3px; height: 42px;z-index: 3;" ></div>
+            <div style="position: absolute; top: 88px;left:179px;background-color: #2f4858; width: 28.4px; height: 3px;z-index: 3;" ></div>
+
+        <div style="position: absolute;top: 59px;left:157px;width: 50.400000000000006px; height: 48px; background-color: #f0f2f2;border-radius: 40%;z-index: 1;"></div>       
+        <div style="position: absolute;top: 59px;left:181px;width: 48px; height: 48px; background-color: #2f4858;border-top-right-radius: 100%;border-bottom-right-radius: 100%;z-index: -1;"></div>
+        <div style="position: absolute;top: 83px;left:229px;width: 12px; height: 3px; background-color: #2f4858;border-top-right-radius: 100%;border-bottom-right-radius: 100%;z-index: -1;"></div>
+    </div>`;
+
     return (
       <ScrollView>
         <View style={styles.circuitContainer}>
@@ -288,14 +352,15 @@ export const CircuitComponent = React.memo(
             contentWidth={width}
             source={{
               html: `
-      <div style="position: relative; top: 0; height: 500; overflow-x: scroll; padding-top: 50;">
-        <div style="position: absolute; top: 0; left: 10;"><b>A</b></div>
-        <div style="position: absolute; top: 0; left: 23;"><b>A'</b></div>
+      <div style="position: relative; top: 0; height: 500px; overflow-x: scroll; padding-top: 50px;">
+        <div style="position: absolute; top: 0px; left: 10px;"><b>A</b></div>
+        <div style="position: absolute; top: 0px; left: 23px;"><b>A'</b></div>
       </div>
     `,
             }}
           />
         </View>
+
         <View style={{ height: 200 }}></View>
       </ScrollView>
     );

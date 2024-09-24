@@ -7,10 +7,12 @@ import ButtonsWrapper from "@/components/ButtonsWrapper";
 import Button from "@/components/Button";
 import useUpdateEffect from "./hooks/useUpdateEffect";
 import { KMaps } from "./utils/KMaps";
-import Subtitle from "@/components/Subtitle";
 import SelectDropdown from "react-native-select-dropdown";
 import ThreeVariablesGrid from "./Grids/ThreeVariablesGrid";
 import FourVariables from "./Grids/FourVariablesGrid";
+import { Colors } from "./colors";
+import Subtitle from "@/components/Subtitle";
+import useStore from "./store";
 
 interface GridScreenProps {
   navigation: any;
@@ -34,11 +36,13 @@ export default function GridScreen({ navigation }: GridScreenProps) {
   const [viewMode, setViewMode] = useState<ViewMode>("map");
   const [resultType, setResultType] = useState<"SOP" | "POS">("SOP");
   const [squares, setSquares] = useState<(number | string)[][][]>([]);
+  const { result, clearResult, setResult } = useStore();
 
   const onPress = (index: number) => {
     let newValues = [...values];
     newValues[index] = nextState(newValues[index]);
     setValues(newValues);
+    clearResult();
   };
 
   const nextState = (value: string) => {
@@ -66,12 +70,12 @@ export default function GridScreen({ navigation }: GridScreenProps) {
   const handleGetResult = (solutionType: "POS" | "SOP") => {
     const kMap = new KMaps(variableQuantity, solutionType, squares);
     kMap.Algorithm();
-
-    navigation.navigate("ResultScreen", {
+    setResult(kMap.getMathExpression());
+    /* navigation.navigate("ResultScreen", {
       result: kMap.getMathExpression(),
       resultType,
       kMap,
-    });
+    }); */
   };
 
   useEffect(() => {
@@ -184,6 +188,15 @@ export default function GridScreen({ navigation }: GridScreenProps) {
             />
           )}
         </View>
+
+        {result && (
+          <View style={styles.resultContainer}>
+            <Subtitle>Resultado</Subtitle>
+            <Text style={{ fontSize: 18, fontWeight: "bold", marginTop: 5 }}>
+              {result}
+            </Text>
+          </View>
+        )}
 
         <ButtonsWrapper title="Tipo de resultado">
           <SelectDropdown
@@ -305,5 +318,16 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 20,
     paddingHorizontal: 60,
+  },
+  resultContainer: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: Colors.PrimaryLightColor,
+    margin: 10,
+    padding: 5,
+    borderRadius: 10,
   },
 });
