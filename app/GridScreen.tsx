@@ -1,11 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import React, { useMemo, useState } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import TwoVariablesGrid from "./Grids/TwoVariablesGrid";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ViewMode } from "./types/types";
 import ButtonsWrapper from "@/components/ButtonsWrapper";
 import Button from "@/components/Button";
-import useUpdateEffect from "./hooks/useUpdateEffect";
 import { KMaps } from "./utils/KMaps";
 import SelectDropdown from "react-native-select-dropdown";
 import ThreeVariablesGrid from "./Grids/ThreeVariablesGrid";
@@ -42,14 +41,6 @@ export default function GridScreen({ navigation }: GridScreenProps) {
     values,
     setAllValues,
   } = useStore();
-
-  const nextState = (value: string) => {
-    if (value == "0") return "1";
-    if (value == "1") return "X";
-    if (value == "X") return "0";
-
-    return "0";
-  };
 
   const getValue = (index: number) => {
     if (values[index] !== "X") return Number(values[index]);
@@ -126,7 +117,7 @@ export default function GridScreen({ navigation }: GridScreenProps) {
     () => {
       getResult(resultType);
     },
-    500,
+    300,
     [squares]
   );
 
