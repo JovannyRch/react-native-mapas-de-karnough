@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import TwoVariablesGrid from "./Grids/TwoVariablesGrid";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,6 +13,7 @@ import FourVariables from "./Grids/FourVariablesGrid";
 import { Colors } from "./colors";
 import Subtitle from "@/components/Subtitle";
 import useStore from "./store";
+import useDebounce from "./hooks/useDebounce";
 
 interface GridScreenProps {
   navigation: any;
@@ -30,26 +31,17 @@ const dropDownValues = [
 ];
 
 export default function GridScreen({ navigation }: GridScreenProps) {
-  const [values, setValues] = useState<string[]>(["0", "0", "0", "0"]);
   const [viewMode, setViewMode] = useState<ViewMode>("map");
   const [resultType, setResultType] = useState<"SOP" | "POS">("SOP");
-  const [squares, setSquares] = useState<(number | string)[][][]>([]);
   const {
     result,
-    clearResult,
     setResult,
     setBoxColors,
     variableQuantity,
     setVariableQuantity,
+    values,
+    setAllValues,
   } = useStore();
-
-  const onPress = (index: number) => {
-    let newValues = [...values];
-    newValues[index] = nextState(newValues[index]);
-    setValues(newValues);
-    clearResult();
-    setBoxColors([]);
-  };
 
   const nextState = (value: string) => {
     if (value == "0") return "1";
@@ -59,35 +51,14 @@ export default function GridScreen({ navigation }: GridScreenProps) {
     return "0";
   };
 
-  const setAll = (value: string) => {
-    let newValues = values.map(() => value);
-    setValues(newValues);
-  };
-
-  useEffect(() => {
-    setValues(Array.from({ length: 2 ** variableQuantity }, () => "0"));
-  }, [variableQuantity]);
-
   const getValue = (index: number) => {
     if (values[index] !== "X") return Number(values[index]);
     return values[index];
   };
 
-  const handleGetResult = (solutionType: "POS" | "SOP") => {
-    const kMap = new KMaps(variableQuantity, solutionType, squares);
-    kMap.Algorithm();
-    setResult(kMap.getMathExpression());
-    setBoxColors(kMap.getBoxColors());
-    /* navigation.navigate("ResultScreen", {
-      result: kMap.getMathExpression(),
-      resultType,
-      kMap,
-    }); */
-  };
-
-  useEffect(() => {
+  const squares = useMemo(() => {
     if (variableQuantity === 2) {
-      setSquares([
+      return [
         [
           [getValue(0), "0", "0"],
           [getValue(2), "1", "0"],
@@ -96,9 +67,9 @@ export default function GridScreen({ navigation }: GridScreenProps) {
           [getValue(1), "0", "1"],
           [getValue(3), "1", "1"],
         ],
-      ]);
+      ];
     } else if (variableQuantity === 3) {
-      setSquares([
+      return [
         [
           [getValue(0), "00", "0"],
           [getValue(2), "01", "0"],
@@ -111,36 +82,53 @@ export default function GridScreen({ navigation }: GridScreenProps) {
           [getValue(7), "11", "1"],
           [getValue(5), "10", "1"],
         ],
-      ]);
+      ];
     } else if (variableQuantity === 4) {
-      setSquares([
+      return [
         [
           [getValue(0), "00", "00"],
           [getValue(4), "01", "00"],
-          [getValue(5), "11", "00"],
+          [getValue(12), "11", "00"],
           [getValue(8), "10", "00"],
         ],
         [
           [getValue(1), "00", "01"],
           [getValue(5), "01", "01"],
-          [getValue(1), "11", "01"],
+          [getValue(13), "11", "01"],
           [getValue(9), "10", "01"],
         ],
         [
           [getValue(3), "00", "11"],
           [getValue(7), "01", "11"],
-          [getValue(1), "11", "11"],
+          [getValue(15), "11", "11"],
           [getValue(11), "10", "11"],
         ],
         [
           [getValue(2), "00", "10"],
           [getValue(6), "01", "10"],
-          [getValue(1), "11", "10"],
+          [getValue(14), "11", "10"],
           [getValue(10), "10", "10"],
         ],
-      ]);
+      ];
     }
   }, [values]);
+
+  const getResult = (solutionType: "POS" | "SOP") => {
+    if (squares) {
+      const kMap = new KMaps(variableQuantity, solutionType, squares);
+      kMap.Algorithm();
+      setResult(kMap.getMathExpression());
+      setBoxColors(kMap.getBoxColors());
+    }
+  };
+
+  useDebounce(
+    () => {
+      getResult(resultType);
+    },
+    500,
+    [squares]
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -166,34 +154,16 @@ export default function GridScreen({ navigation }: GridScreenProps) {
         currentView={viewMode}
         setView={(view) => setViewMode(view)}
       /> */}
-        {/* <ButtonsWrapper title="Valores">
-        <Button onPress={() => setAll("1")} title="1s" />
-        <Button onPress={() => setAll("0")} title="0s" />
-        <Button onPress={() => setAll("X")} title="Xs" />
-      </ButtonsWrapper>
- */}
+        <ButtonsWrapper title="Valores">
+          <Button onPress={() => setAllValues("1")} title="1s" />
+          <Button onPress={() => setAllValues("0")} title="0s" />
+          <Button onPress={() => setAllValues("X")} title="Xs" />
+        </ButtonsWrapper>
+
         <View style={styles.gridContainer}>
-          {variableQuantity == 2 && (
-            <TwoVariablesGrid
-              onPress={onPress}
-              values={values}
-              vars={variableQuantity}
-            />
-          )}
-          {variableQuantity == 3 && (
-            <ThreeVariablesGrid
-              onPress={onPress}
-              values={values}
-              vars={variableQuantity}
-            />
-          )}
-          {variableQuantity == 4 && (
-            <FourVariables
-              onPress={onPress}
-              values={values}
-              vars={variableQuantity}
-            />
-          )}
+          {variableQuantity == 2 && <TwoVariablesGrid />}
+          {variableQuantity == 3 && <ThreeVariablesGrid />}
+          {variableQuantity == 4 && <FourVariables />}
         </View>
 
         {result && (
@@ -248,13 +218,13 @@ export default function GridScreen({ navigation }: GridScreenProps) {
             dropdownStyle={styles.dropdownMenuStyle}
           />
         </ButtonsWrapper>
-        <View style={styles.resultButtonContainer}>
+        {/*  <View style={styles.resultButtonContainer}>
           <Button
             onPress={() => handleGetResult(resultType)}
             title="Obtener resultado"
             active
           />
-        </View>
+        </View> */}
       </ScrollView>
     </SafeAreaView>
   );

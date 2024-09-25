@@ -13,7 +13,7 @@ const Subtitle = ({ children }: SubtitleProps) => {
 const styles = StyleSheet.create({
   text: {
     color: Colors.PrimaryColor,
-    fontSize: 20,
+    fontSize: 18,
     textAlign: "left",
     fontWeight: "500",
   },

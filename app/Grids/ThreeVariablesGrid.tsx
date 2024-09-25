@@ -4,15 +4,7 @@ import variablesStyles from "./styles";
 import GridBox from "@/components/GridBox";
 import DiagonalBox from "./DiagonalBox";
 
-export default function ThreeVariablesGrid({
-  onPress,
-  values,
-  vars,
-}: {
-  onPress: (index: number) => void;
-  values: string[];
-  vars: number;
-}) {
+export default function ThreeVariablesGrid() {
   return (
     <>
       <View style={variablesStyles.row}>
@@ -36,75 +28,19 @@ export default function ThreeVariablesGrid({
         <View style={variablesStyles.lefColumn}>
           <Text style={variablesStyles.varText}>0</Text>
         </View>
-        <GridBox
-          total={vars}
-          values={values}
-          onPress={onPress}
-          index={0}
-          row={0}
-          column={0}
-        />
-        <GridBox
-          total={vars}
-          values={values}
-          onPress={onPress}
-          index={2}
-          row={0}
-          column={1}
-        />
-        <GridBox
-          total={vars}
-          values={values}
-          onPress={onPress}
-          index={6}
-          row={0}
-          column={2}
-        />
-        <GridBox
-          total={vars}
-          values={values}
-          onPress={onPress}
-          index={4}
-          row={0}
-          column={3}
-        />
+        <GridBox index={0} row={0} column={0} />
+        <GridBox index={2} row={0} column={1} />
+        <GridBox index={6} row={0} column={2} />
+        <GridBox index={4} row={0} column={3} />
       </View>
       <View style={variablesStyles.row}>
         <View style={variablesStyles.lefColumn}>
           <Text style={variablesStyles.varText}>1</Text>
         </View>
-        <GridBox
-          total={vars}
-          values={values}
-          onPress={onPress}
-          index={1}
-          row={1}
-          column={0}
-        />
-        <GridBox
-          total={vars}
-          values={values}
-          onPress={onPress}
-          index={3}
-          row={1}
-          column={1}
-        />
-        <GridBox
-          total={vars}
-          values={values}
-          onPress={onPress}
-          index={7}
-          row={1}
-          column={2}
-        />
-        <GridBox
-          total={vars}
-          values={values}
-          onPress={onPress}
-          index={5}
-          row={1}
-          column={3}
-        />
+        <GridBox index={1} row={1} column={0} />
+        <GridBox index={3} row={1} column={1} />
+        <GridBox index={7} row={1} column={2} />
+        <GridBox index={5} row={1} column={3} />
       </View>
     </>
   );

@@ -4,17 +4,7 @@ import variablesStyles from "./styles";
 import GridBox from "@/components/GridBox";
 import DiagonalBox from "./DiagonalBox";
 
-interface TwoVariablesProps {
-  onPress: (index: number) => void;
-  values: string[];
-  vars: number;
-}
-
-export default function TwoVariablesGrid({
-  onPress,
-  values,
-  vars,
-}: TwoVariablesProps) {
+export default function TwoVariablesGrid() {
   return (
     <View>
       <View style={variablesStyles.row}>
@@ -32,43 +22,15 @@ export default function TwoVariablesGrid({
         <View style={variablesStyles.lefColumn}>
           <Text style={variablesStyles.varText}>0</Text>
         </View>
-        <GridBox
-          total={vars}
-          values={values}
-          onPress={onPress}
-          index={0}
-          row={0}
-          column={1}
-        />
-        <GridBox
-          total={vars}
-          values={values}
-          onPress={onPress}
-          index={2}
-          row={0}
-          column={2}
-        />
+        <GridBox index={0} row={0} column={0} />
+        <GridBox index={2} row={0} column={1} />
       </View>
       <View style={variablesStyles.row}>
         <View style={variablesStyles.lefColumn}>
           <Text style={variablesStyles.varText}>1</Text>
         </View>
-        <GridBox
-          total={vars}
-          values={values}
-          onPress={onPress}
-          index={1}
-          row={0}
-          column={1}
-        />
-        <GridBox
-          total={vars}
-          values={values}
-          onPress={onPress}
-          index={3}
-          row={0}
-          column={1}
-        />
+        <GridBox index={1} row={1} column={0} />
+        <GridBox index={3} row={1} column={1} />
       </View>
     </View>
   );

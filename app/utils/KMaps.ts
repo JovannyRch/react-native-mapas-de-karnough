@@ -8,7 +8,9 @@ export class KMaps {
   mathExpression: string;
   groups: Position[][];
   borderWidth: number;
+  borderRadius: number;
   boxColors: BoxColor[];
+  colors: string[];
 
   constructor(
     typeMap: number,
@@ -22,7 +24,18 @@ export class KMaps {
     this.mathExpression = "";
     this.groups = [];
     this.borderWidth = 5;
+    this.borderRadius = 10;
     this.boxColors = [];
+    this.colors = [
+      "red",
+      "blue",
+      "green",
+      "orange",
+      "#50C878",
+      "lightblue",
+      "#CD7F32",
+      "#ff6699",
+    ];
   }
 
   Algorithm() {
@@ -471,9 +484,6 @@ export class KMaps {
     //this.groups = { ...groups };
     this.Solution(temp, groups);
 
-    console.log("temp", temp);
-    console.log("groups", groups);
-
     this.drawGroup(temp, groups);
   }
 
@@ -634,16 +644,7 @@ export class KMaps {
   }
 
   drawGroup(temp: any, groups: any) {
-    let color = [
-      "red",
-      "blue",
-      "green",
-      "orange",
-      "#50C878",
-      "lightblue",
-      "#CD7F32",
-      "#ff6699",
-    ]; //array dei colori
+    //array dei colori
     let c = -1; //usato per identificare i singoli div per il quale poi verranno eliminati, indica anche il colore da usare
 
     this.boxColors = [];
@@ -662,7 +663,7 @@ export class KMaps {
           const row = groups[i][j].riga;
 
           let element: any = {
-            borderColor: color[c],
+            borderColor: this.colors[c],
           };
 
           //Valutazione del tipo di elemento secondo quale celle del gruppo gli sono adiacenti e in quale posizione
@@ -733,6 +734,7 @@ export class KMaps {
           } else if (sotto) element = this.addBorder(element, "closedTop");
           else element = this.addBorder(element, "monoGroup");
           j++;
+
           this.boxColors.push({ row, column: col, style: element });
         }
       }
@@ -809,28 +811,28 @@ export class KMaps {
           ...element,
           borderTopWidth: this.borderWidth,
           borderRightWidth: this.borderWidth,
-          borderTopRightRadius: 10,
+          borderTopRightRadius: this.borderRadius,
         };
       case "topLeft":
         return {
           ...element,
           borderTopWidth: this.borderWidth,
           borderLeftWidth: this.borderWidth,
-          borderTopLeftRadius: 10,
+          borderTopLeftRadius: this.borderRadius,
         };
       case "bottomRight":
         return {
           ...element,
           borderBottomWidth: this.borderWidth,
           borderRightWidth: this.borderWidth,
-          borderBottomRightRadius: 10,
+          borderBottomRightRadius: this.borderRadius,
         };
       case "bottomLeft":
         return {
           ...element,
           borderBottomWidth: this.borderWidth,
           borderLeftWidth: this.borderWidth,
-          borderBottomLeftRadius: 10,
+          borderBottomLeftRadius: this.borderRadius,
         };
       case "closedLeft":
         return {
@@ -838,8 +840,8 @@ export class KMaps {
           borderLeftWidth: this.borderWidth,
           borderTopWidth: this.borderWidth,
           borderBottomWidth: this.borderWidth,
-          borderBottomLeftRadius: 10,
-          borderTopLeftRadius: 10,
+          borderBottomLeftRadius: this.borderRadius,
+          borderTopLeftRadius: this.borderRadius,
         };
       case "closedRight":
         return {
@@ -847,8 +849,8 @@ export class KMaps {
           borderRightWidth: this.borderWidth,
           borderTopWidth: this.borderWidth,
           borderBottomWidth: this.borderWidth,
-          borderBottomRightRadius: 10,
-          borderTopRightRadius: 10,
+          borderBottomRightRadius: this.borderRadius,
+          borderTopRightRadius: this.borderRadius,
         };
 
       case "closedTop":
@@ -857,8 +859,8 @@ export class KMaps {
           borderTopWidth: this.borderWidth,
           borderLeftWidth: this.borderWidth,
           borderRightWidth: this.borderWidth,
-          borderTopRightRadius: 10,
-          borderTopLeftRadius: 10,
+          borderTopRightRadius: this.borderRadius,
+          borderTopLeftRadius: this.borderRadius,
         };
       case "closedBottom":
         return {
@@ -866,8 +868,8 @@ export class KMaps {
           borderBottomWidth: this.borderWidth,
           borderLeftWidth: this.borderWidth,
           borderRightWidth: this.borderWidth,
-          borderBottomRightRadius: 10,
-          borderBottomLeftRadius: 10,
+          borderBottomRightRadius: this.borderRadius,
+          borderBottomLeftRadius: this.borderRadius,
         };
       case "top-bottom":
         return {
@@ -885,7 +887,7 @@ export class KMaps {
         return {
           ...element,
           borderWidth: this.borderWidth,
-          borderRadius: 10,
+          borderRadius: this.borderRadius,
         };
       default:
         return element;
@@ -972,19 +974,6 @@ export class KMaps {
   }
 
   getGroups(): Position[][] {
-    /* console.log("this.groups", this.groups); */
-    /* const groups = {
-      "0": [
-        { col: 2, riga: 1 },
-        { col: 3, riga: 1 },
-      ],
-      "1": [
-        { col: 0, riga: 0 },
-        { col: 1, riga: 0 },
-      ],
-      "2": [{ col: 3, riga: 1 }],
-      "3": [{ col: 1, riga: 0 }],
-    }; */
     return [
       [
         {

@@ -1,37 +1,18 @@
 import useStore from "@/app/store";
-import { BoxColor, Position } from "@/app/types/types";
-import React, { useEffect, useMemo } from "react";
+import { BoxColor } from "@/app/types/types";
+import { nextSquareState } from "@/app/utils";
+import React, { useMemo } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
-const Colors: string[] = [
-  "red",
-  "blue",
-  "green",
-  "orange",
-  "#50C878",
-  "lightblue",
-  "#CD7F32",
-  "#ff6699",
-];
-
 interface GridBoxProps {
-  values: string[];
   index: number;
-  onPress: (index: number) => void;
-  total: number;
+
   row: number;
   column: number;
 }
 
-const GridBox = ({
-  values,
-  index,
-  onPress,
-  total,
-  row,
-  column,
-}: GridBoxProps) => {
-  const { result, boxColors } = useStore();
+const GridBox = ({ index, row, column }: GridBoxProps) => {
+  const { boxColors, values, setValues } = useStore();
 
   const boxes: BoxColor[] = useMemo(() => {
     return boxColors.filter((box) => {
@@ -39,58 +20,42 @@ const GridBox = ({
     });
   }, [boxColors, row, column]);
 
-  console.log("boxes", boxes);
-
-  const getStyle = (value: number | string) => {
-    if (result) {
-      return styles.box;
-    }
-
-    if (value == 1) {
-      return { ...styles.box, backgroundColor: "#5271FF" };
-    }
-    if (value == "X") {
-      return { ...styles.box, backgroundColor: "#9ee493" };
-    }
-    return styles.box;
+  const handleOnPress = (index: number) => {
+    const newValues = [...values];
+    newValues[index] = nextSquareState(values[index]);
+    setValues(newValues);
   };
 
-  const parseBin = (number: number) => {
-    let bin = number.toString(2);
-    while (bin.length < total) {
-      bin = "0" + bin;
-    }
-    return bin;
-  };
-
-  const getValueStyle = () => {
-    let style: any = {
-      fontSize: 25,
-      textAlign: "center",
-      color: "black",
-    };
-
-    if (values[index] == "1" && !result) style = { ...style, color: "white" };
-    return style;
-  };
+  const value = values[index];
 
   return (
-    <View style={{ ...getStyle(values[index]) }}>
-      <TouchableOpacity style={styles.touch} onPress={() => onPress(index)}>
+    <View style={styles.box}>
+      <TouchableOpacity
+        style={styles.touch}
+        onPress={() => handleOnPress(index)}
+      >
         <Text
           style={{
             ...styles.index,
-            ...(values[index] == "1" && !result ? { color: "white" } : {}),
           }}
         >
-          {/*  {total != 5 ? `${parseBin(index)} - ${index} ` : index} */}
           {index}
         </Text>
         <View style={styles.containerText}>
-          <Text style={getValueStyle()}>{values[index]}</Text>
+          <Text
+            style={{
+              ...styles.value,
+              fontWeight: value !== "0" ? "bold" : "400",
+            }}
+          >
+            {value}
+          </Text>
         </View>
-        {boxes.map(({ style }) => (
-          <View key={index} style={{ ...styles.overlayBox, ...style }} />
+        {boxes.map(({ style, row, column }) => (
+          <View
+            key={`#${row},${column},${style.borderColor}`}
+            style={{ ...styles.overlayBox, ...style }}
+          />
         ))}
       </TouchableOpacity>
     </View>
@@ -135,6 +100,11 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     opacity: 0.5,
+  },
+  value: {
+    fontSize: 23,
+    textAlign: "center",
+    color: "black",
   },
 });
 export default GridBox;
