@@ -1,8 +1,7 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import TwoVariablesGrid from "./Grids/TwoVariablesGrid";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ViewMode } from "./types/types";
 import ButtonsWrapper from "@/components/ButtonsWrapper";
 import Button from "@/components/Button";
 import { KMaps } from "./utils/KMaps";
@@ -30,8 +29,6 @@ const dropDownValues = [
 ];
 
 export default function GridScreen({ navigation }: GridScreenProps) {
-  const [viewMode, setViewMode] = useState<ViewMode>("map");
-  const [resultType, setResultType] = useState<"SOP" | "POS">("SOP");
   const {
     result,
     setResult,
@@ -40,6 +37,8 @@ export default function GridScreen({ navigation }: GridScreenProps) {
     setVariableQuantity,
     values,
     setAllValues,
+    resultType,
+    setResultType,
   } = useStore();
 
   const getValue = (index: number) => {
@@ -118,7 +117,7 @@ export default function GridScreen({ navigation }: GridScreenProps) {
       getResult(resultType);
     },
     300,
-    [squares]
+    [squares, resultType]
   );
 
   return (

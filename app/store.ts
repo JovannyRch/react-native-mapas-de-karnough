@@ -13,6 +13,8 @@ interface ResultStore {
   boxColors: BoxColor[];
   setBoxColors: (newBoxColors: BoxColor[]) => void;
   reset: () => void;
+  resultType: "SOP" | "POS";
+  setResultType: (newResultType: "SOP" | "POS") => void;
 }
 
 export const useStore = create<ResultStore>((set) => ({
@@ -38,6 +40,9 @@ export const useStore = create<ResultStore>((set) => ({
     set({ result: "" });
     set({ boxColors: [] });
   },
+  resultType: "SOP",
+  setResultType: (newResultType: "SOP" | "POS") =>
+    set({ resultType: newResultType }),
 }));
 
 export default useStore;

@@ -12,7 +12,7 @@ interface GridBoxProps {
 }
 
 const GridBox = ({ index, row, column }: GridBoxProps) => {
-  const { boxColors, values, setValues } = useStore();
+  const { boxColors, values, setValues, resultType } = useStore();
 
   const boxes: BoxColor[] = useMemo(() => {
     return boxColors.filter((box) => {
@@ -45,7 +45,12 @@ const GridBox = ({ index, row, column }: GridBoxProps) => {
           <Text
             style={{
               ...styles.value,
-              fontWeight: value !== "0" ? "bold" : "400",
+              fontWeight:
+                resultType === "SOP" && value === "1"
+                  ? "bold"
+                  : resultType === "POS" && value === "0"
+                  ? "bold"
+                  : "normal",
             }}
           >
             {value}

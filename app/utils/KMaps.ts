@@ -1,4 +1,4 @@
-import { BoxColor, Position } from "../types/types";
+import { BoxColor } from "../types/types";
 
 export class KMaps {
   squares: (number | string)[][][];
@@ -6,7 +6,6 @@ export class KMaps {
   typeSol: "SOP" | "POS";
   result: string;
   mathExpression: string;
-  groups: Position[][];
   borderWidth: number;
   borderRadius: number;
   boxColors: BoxColor[];
@@ -971,31 +970,6 @@ export class KMaps {
 
   getMathExpression() {
     return this.mathExpression;
-  }
-
-  getGroups(): Position[][] {
-    return [
-      [
-        {
-          row: 0,
-          column: 0,
-        },
-        {
-          row: 0,
-          column: 1,
-        },
-      ],
-      [
-        {
-          row: 1,
-          column: 2,
-        },
-        {
-          row: 1,
-          column: 3,
-        },
-      ],
-    ];
   }
 
   getBoxColors() {
