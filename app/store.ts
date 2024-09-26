@@ -1,9 +1,11 @@
 import { create } from "zustand";
-import { BoxColor, Position } from "./types/types";
+import { BoxColor, VectorResultItem } from "./types/types";
 
 interface ResultStore {
   result: string;
   setResult: (newResult: string) => void;
+  vectorResult: VectorResultItem[];
+  setVectorResult: (newVectorResult: VectorResultItem[]) => void;
   clearResult: () => void;
   values: string[];
   setAllValues: (newValue: string) => void;
@@ -43,6 +45,9 @@ export const useStore = create<ResultStore>((set) => ({
   resultType: "SOP",
   setResultType: (newResultType: "SOP" | "POS") =>
     set({ resultType: newResultType }),
+  vectorResult: [],
+  setVectorResult: (newVectorResult: VectorResultItem[]) =>
+    set({ vectorResult: newVectorResult }),
 }));
 
 export default useStore;

@@ -39,6 +39,8 @@ export default function GridScreen({ navigation }: GridScreenProps) {
     setAllValues,
     resultType,
     setResultType,
+    setVectorResult,
+    vectorResult,
   } = useStore();
 
   const getValue = (index: number) => {
@@ -109,6 +111,7 @@ export default function GridScreen({ navigation }: GridScreenProps) {
       kMap.Algorithm();
       setResult(kMap.getMathExpression());
       setBoxColors(kMap.getBoxColors());
+      setVectorResult(kMap.getVectorResult());
     }
   };
 
@@ -156,12 +159,19 @@ export default function GridScreen({ navigation }: GridScreenProps) {
           {variableQuantity == 4 && <FourVariables />}
         </View>
 
-        {result && (
+        {vectorResult.length > 0 && (
           <View style={styles.resultContainer}>
             <Subtitle>Resultado</Subtitle>
-            <Text style={{ fontSize: 18, fontWeight: "bold", marginTop: 5 }}>
-              {result}
-            </Text>
+            <View style={styles.resultVector}>
+              {vectorResult.map((item, index) => (
+                <Text
+                  key={index}
+                  style={{ ...styles.resultItem, ...item.style }}
+                >
+                  {item.value}
+                </Text>
+              ))}
+            </View>
           </View>
         )}
 
@@ -289,12 +299,22 @@ const styles = StyleSheet.create({
   resultContainer: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
     borderColor: Colors.PrimaryLightColor,
     margin: 10,
     padding: 5,
     borderRadius: 10,
+  },
+  resultVector: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 5,
+  },
+  resultItem: {
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });

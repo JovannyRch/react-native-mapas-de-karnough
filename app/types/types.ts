@@ -10,3 +10,8 @@ export interface BoxColor {
   column: number;
   style: any;
 }
+
+export interface VectorResultItem {
+  value: string;
+  style: any;
+}

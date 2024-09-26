@@ -1,4 +1,4 @@
-import { BoxColor } from "../types/types";
+import { BoxColor, VectorResultItem } from "../types/types";
 
 export class KMaps {
   squares: (number | string)[][][];
@@ -10,6 +10,7 @@ export class KMaps {
   borderRadius: number;
   boxColors: BoxColor[];
   colors: string[];
+  vectorResult: VectorResultItem[];
 
   constructor(
     typeMap: number,
@@ -21,7 +22,7 @@ export class KMaps {
     this.squares = squares;
     this.result = "";
     this.mathExpression = "";
-    this.groups = [];
+    this.vectorResult = [];
     this.borderWidth = 5;
     this.borderRadius = 10;
     this.boxColors = [];
@@ -630,6 +631,26 @@ export class KMaps {
     this.mathExpression = vettoreSol2.join(
       this.typeSol === "SOP" ? " + " : " · "
     );
+
+    //generete vector result
+    this.vectorResult = [];
+    vettoreSol2.forEach((item, index) => {
+      this.vectorResult.push({
+        value: item,
+        style: {
+          color: this.colors[index],
+        },
+      });
+      if (index < vettoreSol2.length - 1) {
+        this.vectorResult.push({
+          value: this.typeSol === "SOP" ? " + " : " · ",
+          style: {
+            color: "black",
+          },
+        });
+      }
+    });
+
     /* this.drawSolution(vettoreSol); */
   }
 
@@ -974,5 +995,9 @@ export class KMaps {
 
   getBoxColors() {
     return this.boxColors;
+  }
+
+  getVectorResult() {
+    return this.vectorResult;
   }
 }
