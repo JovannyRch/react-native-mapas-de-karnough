@@ -41,6 +41,7 @@ export default function GridScreen({ navigation }: GridScreenProps) {
     setResultType,
     setVectorResult,
     vectorResult,
+    setCircuitResult,
   } = useStore();
 
   const getValue = (index: number) => {
@@ -112,6 +113,7 @@ export default function GridScreen({ navigation }: GridScreenProps) {
       setResult(kMap.getMathExpression());
       setBoxColors(kMap.getBoxColors());
       setVectorResult(kMap.getVectorResult());
+      setCircuitResult(kMap.getCircuitResult());
     }
   };
 
@@ -218,15 +220,20 @@ export default function GridScreen({ navigation }: GridScreenProps) {
             dropdownStyle={styles.dropdownMenuStyle}
           />
         </ButtonsWrapper>
-        {/*  <View style={styles.resultButtonContainer}>
-          <Button
-            onPress={() => {
-              navigation.navigate("ResultScreen");
-            }}
-            title="Obtener resultado"
-            active
-          />
-        </View> */}
+        {result && (
+          <View style={styles.resultButtonContainer}>
+            <Button
+              onPress={() => {
+                navigation.navigate("ResultScreen", {
+                  result,
+                  resultType,
+                });
+              }}
+              title="Mostrar más detalles"
+              active
+            />
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

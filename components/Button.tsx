@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.PrimaryButtonColor,
     borderWidth: 1,
     flex: 1,
-    height: 30,
+    height: 37,
   },
   text: {
     fontSize: 14,

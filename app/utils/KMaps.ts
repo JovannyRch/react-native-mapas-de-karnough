@@ -985,7 +985,7 @@ export class KMaps {
     ); */
   }
 
-  getResult() {
+  getCircuitResult() {
     return this.result;
   }
 

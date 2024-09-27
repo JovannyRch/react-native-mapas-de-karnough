@@ -17,6 +17,8 @@ interface ResultStore {
   reset: () => void;
   resultType: "SOP" | "POS";
   setResultType: (newResultType: "SOP" | "POS") => void;
+  circuitResult: string;
+  setCircuitResult: (newCircuitResult: string) => void;
 }
 
 export const useStore = create<ResultStore>((set) => ({
@@ -48,6 +50,9 @@ export const useStore = create<ResultStore>((set) => ({
   vectorResult: [],
   setVectorResult: (newVectorResult: VectorResultItem[]) =>
     set({ vectorResult: newVectorResult }),
+  circuitResult: "",
+  setCircuitResult: (newCircuitResult: string) =>
+    set({ circuitResult: newCircuitResult }),
 }));
 
 export default useStore;

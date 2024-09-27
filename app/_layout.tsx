@@ -43,7 +43,7 @@ export default function RootLayout() {
         name="ResultScreen"
         component={ResultScreen}
         options={{
-          title: "Resultado",
+          title: "Detalles",
         }}
       />
     </Stack.Navigator>
