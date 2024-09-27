@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "mapas-de-karnaugh-2024",
+    "name": "Mapas de Karnaugh",
     "slug": "mapas-de-karnaugh-2024",
-    "version": "1.0.0",
+    "version": "2.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.jovannyrch.kmaps"
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +32,11 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a903c3d4-f9c6-4c51-be96-23984c99be3d"
+      }
     }
   }
 }

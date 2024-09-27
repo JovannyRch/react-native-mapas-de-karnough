@@ -119,7 +119,7 @@ export default function GridScreen({ navigation }: GridScreenProps) {
     () => {
       getResult(resultType);
     },
-    300,
+    500,
     [squares, resultType]
   );
 
@@ -220,7 +220,9 @@ export default function GridScreen({ navigation }: GridScreenProps) {
         </ButtonsWrapper>
         {/*  <View style={styles.resultButtonContainer}>
           <Button
-            onPress={() => handleGetResult(resultType)}
+            onPress={() => {
+              navigation.navigate("ResultScreen");
+            }}
             title="Obtener resultado"
             active
           />
