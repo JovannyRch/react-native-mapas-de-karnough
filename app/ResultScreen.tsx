@@ -2,16 +2,12 @@ import { CircuitComponent } from "@/components/Circuit";
 import React from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import useStore from "./store";
+import ResultRow from "@/components/ResultRow";
 
-interface ResultScreenProps {
-  route: any;
-}
-
-const ResultScreen = ({ route }: ResultScreenProps) => {
-  const { result } = useStore();
+const ResultScreen = () => {
   return (
     <SafeAreaView>
-      <Text style={styles.result}>{result}</Text>
+      <ResultRow />
       <CircuitComponent />
     </SafeAreaView>
   );

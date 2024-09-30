@@ -8,10 +8,10 @@ import { KMaps } from "./utils/KMaps";
 import SelectDropdown from "react-native-select-dropdown";
 import ThreeVariablesGrid from "./Grids/ThreeVariablesGrid";
 import FourVariables from "./Grids/FourVariablesGrid";
-import { Colors } from "./colors";
-import Subtitle from "@/components/Subtitle";
 import useStore from "./store";
 import useDebounce from "./hooks/useDebounce";
+import useSquares from "./hooks/useSquares";
+import ResultRow from "@/components/ResultRow";
 
 interface GridScreenProps {
   navigation: any;
@@ -41,79 +41,20 @@ export default function GridScreen({ navigation }: GridScreenProps) {
     setResultType,
     setVectorResult,
     vectorResult,
-    setCircuitResult,
+    setCircuitVector,
   } = useStore();
 
-  const getValue = (index: number) => {
-    if (values[index] !== "X") return Number(values[index]);
-    return values[index];
-  };
-
-  const squares = useMemo(() => {
-    if (variableQuantity === 2) {
-      return [
-        [
-          [getValue(0), "0", "0"],
-          [getValue(2), "1", "0"],
-        ],
-        [
-          [getValue(1), "0", "1"],
-          [getValue(3), "1", "1"],
-        ],
-      ];
-    } else if (variableQuantity === 3) {
-      return [
-        [
-          [getValue(0), "00", "0"],
-          [getValue(2), "01", "0"],
-          [getValue(6), "11", "0"],
-          [getValue(4), "10", "0"],
-        ],
-        [
-          [getValue(1), "00", "1"],
-          [getValue(3), "01", "1"],
-          [getValue(7), "11", "1"],
-          [getValue(5), "10", "1"],
-        ],
-      ];
-    } else if (variableQuantity === 4) {
-      return [
-        [
-          [getValue(0), "00", "00"],
-          [getValue(4), "01", "00"],
-          [getValue(12), "11", "00"],
-          [getValue(8), "10", "00"],
-        ],
-        [
-          [getValue(1), "00", "01"],
-          [getValue(5), "01", "01"],
-          [getValue(13), "11", "01"],
-          [getValue(9), "10", "01"],
-        ],
-        [
-          [getValue(3), "00", "11"],
-          [getValue(7), "01", "11"],
-          [getValue(15), "11", "11"],
-          [getValue(11), "10", "11"],
-        ],
-        [
-          [getValue(2), "00", "10"],
-          [getValue(6), "01", "10"],
-          [getValue(14), "11", "10"],
-          [getValue(10), "10", "10"],
-        ],
-      ];
-    }
-  }, [values]);
+  const squares = useSquares();
 
   const getResult = (solutionType: "POS" | "SOP") => {
     if (squares) {
       const kMap = new KMaps(variableQuantity, solutionType, squares);
+      console.log("Circuit vector", kMap.circuitVector);
       kMap.Algorithm();
       setResult(kMap.getMathExpression());
       setBoxColors(kMap.getBoxColors());
       setVectorResult(kMap.getVectorResult());
-      setCircuitResult(kMap.getCircuitResult());
+      setCircuitVector(kMap.getCircuitVector());
     }
   };
 
@@ -161,21 +102,7 @@ export default function GridScreen({ navigation }: GridScreenProps) {
           {variableQuantity == 4 && <FourVariables />}
         </View>
 
-        {vectorResult.length > 0 && (
-          <View style={styles.resultContainer}>
-            <Subtitle>Resultado</Subtitle>
-            <View style={styles.resultVector}>
-              {vectorResult.map((item, index) => (
-                <Text
-                  key={index}
-                  style={{ ...styles.resultItem, ...item.style }}
-                >
-                  {item.value}
-                </Text>
-              ))}
-            </View>
-          </View>
-        )}
+        <ResultRow />
 
         <ButtonsWrapper title="Tipo de resultado">
           <SelectDropdown
@@ -229,7 +156,7 @@ export default function GridScreen({ navigation }: GridScreenProps) {
                   resultType,
                 });
               }}
-              title="Mostrar más detalles"
+              title="Mostrar circuito"
               active
             />
           </View>
@@ -304,26 +231,5 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 20,
     paddingHorizontal: 60,
-  },
-  resultContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: Colors.PrimaryLightColor,
-    margin: 10,
-    padding: 5,
-    borderRadius: 10,
-  },
-  resultVector: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 5,
-  },
-  resultItem: {
-    fontSize: 18,
-    fontWeight: "bold",
   },
 });

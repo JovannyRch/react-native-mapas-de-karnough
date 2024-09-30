@@ -3,10 +3,10 @@ import React, { useMemo } from "react";
 import { View, StyleSheet, Text, ScrollView } from "react-native";
 import HTML from "react-native-render-html";
 
-export const CircuitComponent = React.memo(() => {
-  const { resultType, variableQuantity, circuitResult } = useStore();
+//TODO: Refactor this component
 
-  const initGroups = "(B'.C') + (A'.C') + (A.B.C)";
+export const CircuitComponent = React.memo(() => {
+  const { resultType, variableQuantity, circuitVector: groups } = useStore();
 
   const isMaxiterm = resultType === "POS";
   const variables = useMemo(() => {
@@ -27,11 +27,8 @@ export const CircuitComponent = React.memo(() => {
   let vars = addNegations(variables);
   const n = vars.length;
   let height = n * 8;
-  let groups = initGroups.split("(").join("").split(")").join("");
-
-  let separator = isMaxiterm ? "·" : "+";
+  console.log("groups", groups);
   let joiner = isMaxiterm ? "+" : ".";
-  groups = groups.split(separator);
   console.log("groups", groups);
   let dy = 0;
   const step = 13;
@@ -278,9 +275,6 @@ export const CircuitComponent = React.memo(() => {
   return (
     <ScrollView>
       <View style={styles.circuitContainer}>
-        <View>
-          <Text style={styles.text}>Circuito</Text>
-        </View>
         <HTML html={htmlContent} />
       </View>
       <View style={{ height: 200 }}></View>

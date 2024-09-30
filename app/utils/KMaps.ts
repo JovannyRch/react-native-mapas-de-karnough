@@ -11,6 +11,7 @@ export class KMaps {
   boxColors: BoxColor[];
   colors: string[];
   vectorResult: VectorResultItem[];
+  circuitVector: string[];
 
   constructor(
     typeMap: number,
@@ -36,6 +37,7 @@ export class KMaps {
       "#CD7F32",
       "#ff6699",
     ];
+    this.circuitVector = [];
   }
 
   Algorithm() {
@@ -492,9 +494,11 @@ export class KMaps {
     const matrice = this.squares; //matrice principale
     var alp = ["A", "B", "C", "D"]; //array con i nomi delle variabili della matrice
     var soluzione = ""; //stringa per calcolare la soluzione di un gruppo
-    var soluzione2 = ""; //stringa per calcolare la soluzione di un gruppo
+    var soluzione2 = "";
+    var soluzione3 = "";
     var vettoreSol = []; //ogni elemento è la soluzione di un gruppo
     var vettoreSol2 = []; //ogni elemento è la soluzione di un gruppo
+    this.circuitVector = [];
     var k, j, t;
     //k è l'indice per scorrere l'array alp, j è l'indice per scorrere le coordinate dei gruppi, t è l'indice per scorrere le coordinate binarie
     var elementoR, elementoC; //queste due variabili contengono la Riga e la Colonna del primo elemento di un gruppo, che è il punto di riferimento
@@ -539,21 +543,27 @@ export class KMaps {
               if (coord.charAt(t) === "0") {
                 soluzione += "'" + alp[k];
                 soluzione2 += alp[k] + "\u0305";
+                soluzione3 += alp[k] + "'";
               } else {
                 soluzione += alp[k];
                 soluzione2 += alp[k];
+                soluzione3 += alp[k];
               }
+              soluzione3 += ".";
             } else {
               //forma POS
               if (coord.charAt(t) === "0") {
                 soluzione += alp[k];
                 soluzione2 += alp[k];
+                soluzione3 += alp[k];
               } else {
                 soluzione += "'" + alp[k];
                 soluzione2 += alp[k] + "\u0305";
+                soluzione3 += alp[k] + "'";
               }
               soluzione += "+";
               soluzione2 += "+";
+              soluzione3 += "+";
             }
           }
           k++;
@@ -585,21 +595,27 @@ export class KMaps {
               if (coord.charAt(t) === "0") {
                 soluzione += "'" + alp[k];
                 soluzione2 += alp[k] + "\u0305";
+                soluzione3 += alp[k] + "'";
               } else {
                 soluzione += alp[k];
                 soluzione2 += alp[k];
+                soluzione3 += alp[k];
               }
+              soluzione3 += ".";
             } else {
               //forma POS
               if (coord.charAt(t) === "0") {
                 soluzione += alp[k];
                 soluzione2 += alp[k];
+                soluzione3 += alp[k];
               } else {
                 soluzione += "'" + alp[k];
                 soluzione2 += alp[k] + "\u0305";
+                soluzione3 += alp[k] + "'";
               }
               soluzione += "+";
               soluzione2 += "+";
+              soluzione3 += "+";
             }
           }
           k++;
@@ -609,13 +625,19 @@ export class KMaps {
           //in forma POS si avrà un "+" a fine stringa e viene eliminato
           soluzione = soluzione.substr(0, soluzione.length - 1);
           soluzione2 = soluzione2.substr(0, soluzione2.length - 1);
+          soluzione3 = soluzione3.substr(0, soluzione3.length - 1);
         }
         vettoreSol.push(soluzione);
         vettoreSol2.push(soluzione2);
+
+        this.circuitVector.push(soluzione3);
         soluzione = "";
         soluzione2 = "";
+        soluzione3 = "";
       }
     }
+
+    console.log("this.circuitVector", this.circuitVector);
 
     if (vettoreSol[0] === "" || !vettoreSol[0]) {
       //se la soluzione è stringa vuota allora la matrice è formata da tutti 0 o da tutti 1
@@ -627,6 +649,7 @@ export class KMaps {
         vettoreSol2[0] = "1";
       }
     }
+
     this.result = vettoreSol.join(this.typeSol === "SOP" ? " + " : " · ");
     this.mathExpression = vettoreSol2.join(
       this.typeSol === "SOP" ? " + " : " · "
@@ -999,5 +1022,9 @@ export class KMaps {
 
   getVectorResult() {
     return this.vectorResult;
+  }
+
+  getCircuitVector() {
+    return this.circuitVector;
   }
 }
