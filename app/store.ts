@@ -24,9 +24,11 @@ interface ResultStore {
   variables: string[];
 }
 
+const VARIABLE_QUANTITY = 4;
+
 export const useStore = create<ResultStore>((set) => ({
-  variableQuantity: 4,
-  values: ["0", "0", "0", "0"],
+  variableQuantity: VARIABLE_QUANTITY,
+  values: Array.from({ length: 2 ** VARIABLE_QUANTITY }, () => "0"),
   setValues: (newValues: string[]) => set({ values: newValues }),
   setAllValues: (newValue: string) => {
     set({ values: Array.from({ length: 2 ** 4 }, () => newValue) });

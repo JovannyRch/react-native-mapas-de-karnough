@@ -5,7 +5,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import ButtonsWrapper from "@/components/ButtonsWrapper";
 import Button from "@/components/Button";
 import { KMaps } from "./utils/KMaps";
-import SelectDropdown from "react-native-select-dropdown";
 import ThreeVariablesGrid from "./Grids/ThreeVariablesGrid";
 import FourVariables from "./Grids/FourVariablesGrid";
 import useStore from "./store";
@@ -69,7 +68,7 @@ export default function GridScreen({ navigation }: GridScreenProps) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View style={{ flexDirection: "row", marginTop: 4 }}>
+        <View style={{ flexDirection: "row" }}>
           <ButtonsWrapper title="Cantidad de variables">
             <Button
               onPress={() => setVariableQuantity(2)}
@@ -156,6 +155,7 @@ export default function GridScreen({ navigation }: GridScreenProps) {
             />
           </View>
         )}
+        <View style={{ height: 100 }} />
       </ScrollView>
     </SafeAreaView>
   );
