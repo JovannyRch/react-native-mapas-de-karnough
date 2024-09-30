@@ -637,8 +637,6 @@ export class KMaps {
       }
     }
 
-    console.log("this.circuitVector", this.circuitVector);
-
     if (vettoreSol[0] === "" || !vettoreSol[0]) {
       //se la soluzione è stringa vuota allora la matrice è formata da tutti 0 o da tutti 1
       if (matrice[0][0][0] === 0) {

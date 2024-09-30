@@ -21,10 +21,11 @@ interface ResultStore {
   setCircuitVector: (newCircuitVector: string[]) => void;
   view: "table" | "map";
   setView: (newView: "table" | "map") => void;
+  variables: string[];
 }
 
 export const useStore = create<ResultStore>((set) => ({
-  variableQuantity: 2,
+  variableQuantity: 4,
   values: ["0", "0", "0", "0"],
   setValues: (newValues: string[]) => set({ values: newValues }),
   setAllValues: (newValue: string) => {
@@ -38,6 +39,11 @@ export const useStore = create<ResultStore>((set) => ({
     set({ result: "" });
     set({ boxColors: [] });
     set({ values: Array.from({ length: 2 ** newQuantity }, () => "0") });
+    set({
+      variables: Array.from({ length: newQuantity }, (_, i) =>
+        String.fromCharCode(65 + i)
+      ),
+    });
     set({ variableQuantity: newQuantity });
   },
   boxColors: [],
@@ -68,8 +74,9 @@ export const useStore = create<ResultStore>((set) => ({
       }),
     });
   },
-  view: "table",
+  view: "map",
   setView: (newView: "table" | "map") => set({ view: newView }),
+  variables: ["A", "B"],
 }));
 
 export default useStore;

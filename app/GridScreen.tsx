@@ -12,6 +12,7 @@ import useStore from "./store";
 import useDebounce from "./hooks/useDebounce";
 import useSquares from "./hooks/useSquares";
 import ResultRow from "@/components/ResultRow";
+import TableView from "@/components/TableView";
 
 interface GridScreenProps {
   navigation: any;
@@ -128,56 +129,19 @@ export default function GridScreen({ navigation }: GridScreenProps) {
         </View>
 
         <View style={styles.gridContainer}>
-          {variableQuantity == 2 && <TwoVariablesGrid />}
-          {variableQuantity == 3 && <ThreeVariablesGrid />}
-          {variableQuantity == 4 && <FourVariables />}
+          {view === "map" && (
+            <>
+              {variableQuantity == 2 && <TwoVariablesGrid />}
+              {variableQuantity == 3 && <ThreeVariablesGrid />}
+              {variableQuantity == 4 && <FourVariables />}
+            </>
+          )}
+
+          {view === "table" && <TableView />}
         </View>
 
         <ResultRow />
 
-        {/*         <ButtonsWrapper title="Tipo de resultado">
-          <SelectDropdown
-            data={dropDownValues}
-            onSelect={(selectedItem, index) => {
-              setResultType(selectedItem.value as "SOP" | "POS");
-            }}
-            renderButton={(selectedItem, isOpened) => {
-              return (
-                <View style={styles.dropdownButtonStyle}>
-                  <Text style={styles.dropdownButtonTxtStyle}>
-                    {(selectedItem && selectedItem.title) ||
-                      (
-                        dropDownValues.find(
-                          (item) => item.value === resultType
-                        ) || dropDownValues[0]
-                      ).title}
-                  </Text>
-                  <Text style={styles.dropdownButtonArrowStyle}>
-                    {isOpened ? "▲" : "▼"}
-                  </Text>
-                </View>
-              );
-            }}
-            renderItem={(item) => {
-              return (
-                <View
-                  style={
-                    resultType === item.value
-                      ? [
-                          styles.dropdownItemStyle,
-                          { backgroundColor: "#D2D9DF" },
-                        ]
-                      : styles.dropdownItemStyle
-                  }
-                >
-                  <Text style={styles.dropdownItemTxtStyle}>{item.title}</Text>
-                </View>
-              );
-            }}
-            showsVerticalScrollIndicator={false}
-            dropdownStyle={styles.dropdownMenuStyle}
-          />
-        </ButtonsWrapper> */}
         {result && (
           <View style={styles.resultButtonContainer}>
             <Button

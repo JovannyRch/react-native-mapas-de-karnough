@@ -74,7 +74,6 @@ const styles = StyleSheet.create({
     borderWidth: 0.3,
     borderColor: "black",
     justifyContent: "center",
-
     backgroundColor: "#C7D0D8",
   },
   touch: {
