@@ -27,9 +27,7 @@ export const CircuitComponent = React.memo(() => {
   let vars = addNegations(variables);
   const n = vars.length;
   let height = n * 8;
-  console.log("groups", groups);
   let joiner = isMaxiterm ? "+" : ".";
-  console.log("groups", groups);
   let dy = 0;
   const step = 13;
   const stepy = 15;

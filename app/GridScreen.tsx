@@ -35,13 +35,13 @@ export default function GridScreen({ navigation }: GridScreenProps) {
     setBoxColors,
     variableQuantity,
     setVariableQuantity,
-    values,
     setAllValues,
     resultType,
-    setResultType,
     setVectorResult,
-    vectorResult,
     setCircuitVector,
+    setView,
+    view,
+    setResultType,
   } = useStore();
 
   const squares = useSquares();
@@ -49,7 +49,6 @@ export default function GridScreen({ navigation }: GridScreenProps) {
   const getResult = (solutionType: "POS" | "SOP") => {
     if (squares) {
       const kMap = new KMaps(variableQuantity, solutionType, squares);
-      console.log("Circuit vector", kMap.circuitVector);
       kMap.Algorithm();
       setResult(kMap.getMathExpression());
       setBoxColors(kMap.getBoxColors());
@@ -62,39 +61,71 @@ export default function GridScreen({ navigation }: GridScreenProps) {
     () => {
       getResult(resultType);
     },
-    500,
+    100,
     [squares, resultType]
   );
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <ButtonsWrapper title="Cantidad de variables">
-          <Button
-            onPress={() => setVariableQuantity(2)}
-            title="2"
-            active={variableQuantity == 2}
-          />
-          <Button
-            onPress={() => setVariableQuantity(3)}
-            title="3"
-            active={variableQuantity == 3}
-          />
-          <Button
-            onPress={() => setVariableQuantity(4)}
-            title="4"
-            active={variableQuantity == 4}
-          />
-        </ButtonsWrapper>
-        {/*   <ViewModeSelector
-        currentView={viewMode}
-        setView={(view) => setViewMode(view)}
-      /> */}
-        <ButtonsWrapper title="Valores">
-          <Button onPress={() => setAllValues("1")} title="1s" />
-          <Button onPress={() => setAllValues("0")} title="0s" />
-          <Button onPress={() => setAllValues("X")} title="Xs" />
-        </ButtonsWrapper>
+        <View style={{ flexDirection: "row", marginTop: 4 }}>
+          <ButtonsWrapper title="Cantidad de variables">
+            <Button
+              onPress={() => setVariableQuantity(2)}
+              title="2"
+              active={variableQuantity == 2}
+            />
+            <Button
+              onPress={() => setVariableQuantity(3)}
+              title="3"
+              active={variableQuantity == 3}
+            />
+            <Button
+              onPress={() => setVariableQuantity(4)}
+              title="4"
+              active={variableQuantity == 4}
+            />
+          </ButtonsWrapper>
+
+          <View style={{ flex: 1 }}>
+            <ButtonsWrapper title="Resultado">
+              <Button
+                onPress={() => setResultType("SOP")}
+                title="SOP"
+                active={resultType === "SOP"}
+              />
+              <Button
+                onPress={() => setResultType("POS")}
+                title="POS"
+                active={resultType === "POS"}
+              />
+            </ButtonsWrapper>
+          </View>
+        </View>
+
+        <View style={{ flexDirection: "row", marginTop: 4 }}>
+          <View style={{ flex: 1 }}>
+            <ButtonsWrapper title="Vista">
+              <Button
+                onPress={() => setView("map")}
+                title="Mapa"
+                active={view === "map"}
+              />
+              <Button
+                onPress={() => setView("table")}
+                title="Tabla"
+                active={view === "table"}
+              />
+            </ButtonsWrapper>
+          </View>
+          <View style={{ flex: 1 }}>
+            <ButtonsWrapper title="Valores">
+              <Button onPress={() => setAllValues("1")} title="1s" />
+              <Button onPress={() => setAllValues("0")} title="0s" />
+              <Button onPress={() => setAllValues("X")} title="Xs" />
+            </ButtonsWrapper>
+          </View>
+        </View>
 
         <View style={styles.gridContainer}>
           {variableQuantity == 2 && <TwoVariablesGrid />}
@@ -104,7 +135,7 @@ export default function GridScreen({ navigation }: GridScreenProps) {
 
         <ResultRow />
 
-        <ButtonsWrapper title="Tipo de resultado">
+        {/*         <ButtonsWrapper title="Tipo de resultado">
           <SelectDropdown
             data={dropDownValues}
             onSelect={(selectedItem, index) => {
@@ -146,7 +177,7 @@ export default function GridScreen({ navigation }: GridScreenProps) {
             showsVerticalScrollIndicator={false}
             dropdownStyle={styles.dropdownMenuStyle}
           />
-        </ButtonsWrapper>
+        </ButtonsWrapper> */}
         {result && (
           <View style={styles.resultButtonContainer}>
             <Button

@@ -19,6 +19,8 @@ interface ResultStore {
   setResultType: (newResultType: "SOP" | "POS") => void;
   circuitVector: string[];
   setCircuitVector: (newCircuitVector: string[]) => void;
+  view: "table" | "map";
+  setView: (newView: "table" | "map") => void;
 }
 
 export const useStore = create<ResultStore>((set) => ({
@@ -66,6 +68,8 @@ export const useStore = create<ResultStore>((set) => ({
       }),
     });
   },
+  view: "table",
+  setView: (newView: "table" | "map") => set({ view: newView }),
 }));
 
 export default useStore;
